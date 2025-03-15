@@ -1,0 +1,1 @@
+python testBRDF_real.py config.yml -v 1 -p $PATH_TO_DIR -H 480 -W 640
