@@ -229,16 +229,19 @@ if __name__ == '__main__':
     # argparser.add_argument('-t', '--target', default=None)
     argparser.add_argument('-dp', '--depth_path', default=None) # npy file
     argparser.add_argument('-ap', '--albedo_path', default=None) # exr, png, jpeg or jpg file
+    
+    argparser.add_argument('-amp', '--albedo_mask_path', default=None)  
+    argparser.add_argument('-new_al', '--new_albedo_value', nargs=3, type=float)  
+
     argparser.add_argument('-mp', '--material_path', default=None)
     argparser.add_argument('-np', '--normal_path', default=None)
-    argparser.add_argument('-sn', '--use_StableNormal', type=bool, default=True)
+    argparser.add_argument('--not_use_StableNormal', action='store_true') 
     argparser.add_argument('-fov', '--fov',type=float, default=50)
     argparser.add_argument('-name', '--name', default='400x640_0')
     argparser.add_argument('-he', '--height',type=int, default=360)
     argparser.add_argument('-wi', '--width',type=int, default=640)
     argparser.add_argument('-tr', '--threshold',type=float, default=1.0)
-    argparser.add_argument('-def', '--use_default', type=bool, default=False)
-
+    argparser.add_argument('--use_default', action='store_false')
 
 
 
@@ -258,14 +261,22 @@ if __name__ == '__main__':
         albedo_path = args.albedo_path
     else:
         albedo_path = args.dir_path+'dense_v1/albedo/000.exr'
-    albedo_array = np.load(albedo_path)
+
+
+
+    if amp is not None:
+        albedo_array = (change_albedo(albedo_path, args.albedo_mask_path, new_color=list(args.new_albedo_value), height=args.height)).astype(np.float32) / 255
+    elif albedo_path[-3:] == 'png' or albedo_path[-3:] == 'jpg' or albedo_path[-4:] == 'jpeg': 
+        albedo_array = np.array(Image.open(albedo_path)).astype(np.float32)/255
+    elif albedo_path[-3:] == 'exr':
+        albedo_array = my_util_func.exr2np(albedo_path, height=args.height)
 
     # load material
     if args.material_path is not None:
         material_path = args.material_path
     else:
         material_path = args.dir_path+'dense_v1/material/000.exr'
-    material_array = np.load(material_path)
+    material_array = my_util_func.exr2np(material_path, height=args.height)
 
 
     if args.use_default:
@@ -277,7 +288,8 @@ if __name__ == '__main__':
         else:
             normal_path = args.dir_path+'/normal.png'
 
-        if args.sn:
+        if not args.not_use_StableNormal:
+            # In StableNormal's normal image, the x-axis is the opposite of that of the our method
             normal = Image.open(normal_path).resize((res[1],res[0]), Image.BICUBIC) # (W,H)
             normal_new = np.zeros([res[0], res[1], 3])
             normal_new[:,:,0] = -1*(((np.array(normal).astype(np.float32) / 255)[:,:,0])*2-1)
@@ -285,8 +297,8 @@ if __name__ == '__main__':
             normal_new[:,:,2] = (((np.array(normal).astype(np.float32) / 255)[:,:,2])*2-1)
             normal_array = normal_new
         else:
-            if normal_path[-3:] = 'png' or normal_path[-3:] = 'jpg' or normal_path[-4:] = 'jpeg': 
-                normal_array = Image.open(dir_path + '/0_normal.png').resize((res[1],res[0]), Image.BICUBIC) # (W,H)
-            elif normal_path[-3:] = 'npy':
+            if normal_path[-3:] == 'png' or normal_path[-3:] == 'jpg' or normal_path[-4:] == 'jpeg': 
+                normal_array = Image.open(normal_path).resize((res[1],res[0]), Image.BICUBIC) # (W,H)
+            elif normal_path[-3:] == 'npy':
                 normal_array = np.load(normal_path)
         build_mesh_pixel_face(name=args.name, depth_array, albedo_array, material_array, normal_array, res=[args.height,args.width], fov=args.fov, threshold_angle=args.threshold)
