@@ -242,7 +242,7 @@ if __name__ == '__main__':
     argparser.add_argument('--height',type=int, default=360)
     argparser.add_argument('--width',type=int, default=640)
     argparser.add_argument('-tr', '--threshold',type=float, default=1.0)
-    argparser.add_argument('--use_default', action='store_false')
+    argparser.add_argument('--use_default', action='store_true')
 
 
 
