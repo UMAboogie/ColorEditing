@@ -1,3 +1,4 @@
+# make a polygon mesh file
 import drjit as dr
 import mitsuba as mi
 import matplotlib.pyplot as plt
@@ -7,6 +8,7 @@ import os
 import sys
 from argparse import ArgumentParser
 from PIL import Image
+import my_util_func
 
 def build_mesh_default(name, depth_array, albedo_array, material_array, res=[256,256], fov=90, write_ply=True, threshold=0.01, delete_square=False):
     # mesh : H * W * 3 vertices and (H-1) * (W-1) * 2 faces
@@ -226,7 +228,6 @@ def build_mesh_pixel_face(name, depth_array, albedo_array, material_array, norma
 if __name__ == '__main__':
     argparser = ArgumentParser()
     argparser.add_argument('-p', '--dir_path', default=None)
-    # argparser.add_argument('-t', '--target', default=None)
     argparser.add_argument('-dp', '--depth_path', default=None) # npy file
     argparser.add_argument('-ap', '--albedo_path', default=None) # exr, png, jpeg or jpg file
     
@@ -237,9 +238,9 @@ if __name__ == '__main__':
     argparser.add_argument('-np', '--normal_path', default=None)
     argparser.add_argument('--not_use_StableNormal', action='store_true') 
     argparser.add_argument('-fov', '--fov',type=float, default=50)
-    argparser.add_argument('-name', '--name', default='400x640_0')
-    argparser.add_argument('-he', '--height',type=int, default=360)
-    argparser.add_argument('-wi', '--width',type=int, default=640)
+    argparser.add_argument('-name', '--name', help='mesh file name to be given', default='livingroom')
+    argparser.add_argument('-h', '--height',type=int, default=360)
+    argparser.add_argument('-w', '--width',type=int, default=640)
     argparser.add_argument('-tr', '--threshold',type=float, default=1.0)
     argparser.add_argument('--use_default', action='store_false')
 
@@ -247,7 +248,7 @@ if __name__ == '__main__':
 
     args = argparser.parse_args()
 
-
+    res = [args.height, args.width]
 
     # load depth
     if args.depth_path is not None:
@@ -263,9 +264,8 @@ if __name__ == '__main__':
         albedo_path = args.dir_path+'dense_v1/albedo/000.exr'
 
 
-
-    if amp is not None:
-        albedo_array = (change_albedo(albedo_path, args.albedo_mask_path, new_color=list(args.new_albedo_value), height=args.height)).astype(np.float32) / 255
+    if args.amp is not None:
+        albedo_array = (my_util_func.change_albedo(albedo_path, args.albedo_mask_path, new_color=list(args.new_albedo_value), height=args.height)).astype(np.float32) / 255
     elif albedo_path[-3:] == 'png' or albedo_path[-3:] == 'jpg' or albedo_path[-4:] == 'jpeg': 
         albedo_array = np.array(Image.open(albedo_path)).astype(np.float32)/255
     elif albedo_path[-3:] == 'exr':
@@ -279,8 +279,11 @@ if __name__ == '__main__':
     material_array = my_util_func.exr2np(material_path, height=args.height)
 
 
+    if args.dir_path is not None:
+        name = args.dir_path+'/'+args.name
+
     if args.use_default:
-        build_mesh_default(name=args.name, depth_array, albedo_array, material_array, res=[args.height,args.width], fov=args.fov, threshold=args.threshold)
+        build_mesh_default(name, depth_array, albedo_array, material_array, res=[args.height,args.width], fov=args.fov, threshold=args.threshold)
     else:
         # load normal  
         if args.normal_path is not None:
@@ -301,4 +304,4 @@ if __name__ == '__main__':
                 normal_array = Image.open(normal_path).resize((res[1],res[0]), Image.BICUBIC) # (W,H)
             elif normal_path[-3:] == 'npy':
                 normal_array = np.load(normal_path)
-        build_mesh_pixel_face(name=args.name, depth_array, albedo_array, material_array, normal_array, res=[args.height,args.width], fov=args.fov, threshold_angle=args.threshold)
+        build_mesh_pixel_face(name, depth_array, albedo_array, material_array, normal_array, res=res, fov=args.fov, threshold_angle=args.threshold)
