@@ -76,7 +76,7 @@ python arealight_optimization.py --image_path (path for the input image) --mesh_
 python make_polygon_mesh.py --dir_path xxx --fov n --name yyy --height H --width W --albedo_mask_path (path for the mask image) --new_albedo_value r g b 
 ```
 
-   * Please assign new albedo values between 0 and 1.
+   * Please assign new albedo values as integer between 0 and 255.
 
 7. Re-render the image.
 
