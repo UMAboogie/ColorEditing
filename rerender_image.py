@@ -25,8 +25,8 @@ argparser.add_argument('-im', '--image_path', default=None)
 argparser.add_argument('-me_1', '--mesh_path_1', default='example1/livingroom.ply')
 argparser.add_argument('-me_2', '--mesh_path_2', help='albedo changed mesh file path', default=None)
 argparser.add_argument('-fov', '--fov',type=float, default=50)
-argparser.add_argument('-h', '--height',type=int, default=360)
-argparser.add_argument('-w', '--width',type=int, default=640)
+argparser.add_argument('--height',type=int, default=360)
+argparser.add_argument('--width',type=int, default=640)
 
 
 args = argparser.parse_args()

@@ -239,8 +239,8 @@ if __name__ == '__main__':
     argparser.add_argument('--not_use_StableNormal', action='store_true') 
     argparser.add_argument('-fov', '--fov',type=float, default=50)
     argparser.add_argument('-name', '--name', help='mesh file name to be given', default='livingroom')
-    argparser.add_argument('-h', '--height',type=int, default=360)
-    argparser.add_argument('-w', '--width',type=int, default=640)
+    argparser.add_argument('--height',type=int, default=360)
+    argparser.add_argument('--width',type=int, default=640)
     argparser.add_argument('-tr', '--threshold',type=float, default=1.0)
     argparser.add_argument('--use_default', action='store_false')
 
@@ -261,10 +261,10 @@ if __name__ == '__main__':
     if args.albedo_path is not None:
         albedo_path = args.albedo_path
     else:
-        albedo_path = args.dir_path+'dense_v1/albedo/000.exr'
+        albedo_path = args.dir_path+'/dense_v1/albedo/0000.exr'
 
 
-    if args.amp is not None:
+    if args.albedo_mask_path is not None:
         albedo_array = (my_util_func.change_albedo(albedo_path, args.albedo_mask_path, new_color=list(args.new_albedo_value), height=args.height)).astype(np.float32) / 255
     elif albedo_path[-3:] == 'png' or albedo_path[-3:] == 'jpg' or albedo_path[-4:] == 'jpeg': 
         albedo_array = np.array(Image.open(albedo_path)).astype(np.float32)/255
@@ -275,7 +275,7 @@ if __name__ == '__main__':
     if args.material_path is not None:
         material_path = args.material_path
     else:
-        material_path = args.dir_path+'dense_v1/material/000.exr'
+        material_path = args.dir_path+'/dense_v1/material/0000.exr'
     material_array = my_util_func.exr2np(material_path, height=args.height)
 
 

@@ -24,7 +24,7 @@ argparser.add_argument('-im', '--image_path', default='example1/livingroom.png')
 argparser.add_argument('-me', '--mesh_path', default='example1/livingroom.ply')
 argparser.add_argument('-fov', '--fov',type=float, default=50)
 argparser.add_argument('-name', '--name', default='livingroom')
-argparser.add_argument('-h', '--height',type=int, default=360)
+argparser.add_argument('--height',type=int, default=360)
 argparser.add_argument('-spp', '--spp',type=int, default=40)
 argparser.add_argument('-n', '--light_num', type=int, default=6)
 argparser.add_argument('--fix_position', action='store_true') # not optimize light position
