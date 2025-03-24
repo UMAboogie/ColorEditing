@@ -58,6 +58,7 @@ python arealight_optimization.py --image_path (path for the input image) --mesh_
    * Other optional arguments are listed below. If you want to change some condition, plase use them.
       * --spp
       * --light_num
+      * --radius
       * --fix_position
       * --size_opt
       * --use_envmap
