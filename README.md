@@ -6,9 +6,11 @@ Please check updates of used packages especially mitsuba and dr.jit.
 I strongly recommend the use of a virtual environment such as conda.
 Python version I used is 3.11.5.
 In virtual environment you created, please run following commands to build package:
+
 ```
 pip install -r requirements.txt
 ```
+
 If you use [Depth Anything V2](https://github.com/DepthAnything/Depth-Anything-V2) and [StableNormal](https://github.com/Stable-X/StableNormal) in this project, you need clone them in geometry_prediction.
 
 
@@ -25,6 +27,7 @@ If you use [Depth Anything V2](https://github.com/DepthAnything/Depth-Anything-V
     * I used mgnet in [IndoorInverseRendering](https://github.com/jingsenzhu/IndoorInverseRendering) in the project.
     * If you can use more accurate methods, use them.
 4. Make polygon mesh file for Mitsuba 3.
+
 ```
 python make_polygon_mesh.py --dir_path (path for input data directory) --fov (field of view) --name (mesh file name to be given) -height (height of the input image) -width (width of the input image)
 ```
