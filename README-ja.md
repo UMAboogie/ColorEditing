@@ -27,7 +27,7 @@ pip install -r requirements.txt
 
 5. Mitsuba 3用のポリゴンメッシュファイルを作成する。
 ```
-python make_polygon_mesh.py --dir_path (path for input data directory) --fov (field of view) --name (mesh file name to be given) -height (height of the input image) -width (width of the input image)
+python make_polygon_mesh.py --dir_path (path for input data directory) --fov (field of view) --name (mesh file name to be given) --height (height of the input image) --width (width of the input image)
 ```
 
    * 入力ディレクトリが以下のような構造になっている場合、-dir_pathを指定することでポリゴンメッシュファイルを作成することができます。
