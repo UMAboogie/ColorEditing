@@ -72,7 +72,7 @@ python arealight_optimization.py --image_path (path for the input image) --mesh_
 python make_polygon_mesh.py --dir_path xxx --fov n --name yyy --height H --width W --albedo_mask_path (path for the mask image) --new_albedo_value r g b 
 ```
 
-   * 新しいアルベドのRGB値を0から1の間で割り当ててください。
+   * 新しいアルベドのRGB値を0から255の間の整数で割り当ててください。
 
 7. 画像の再レンダリング
 ```
