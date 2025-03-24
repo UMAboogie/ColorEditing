@@ -1,4 +1,5 @@
 # metric depth estimation by Depth Anything V2 for color editing task
+# run the command 'python depth_estimation.py --dir_path xxx' 
 
 import cv2
 import torch
