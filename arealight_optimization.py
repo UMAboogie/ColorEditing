@@ -27,12 +27,14 @@ argparser.add_argument('-name', '--name', default='livingroom')
 argparser.add_argument('--height',type=int, default=360)
 argparser.add_argument('-spp', '--spp',type=int, default=40)
 argparser.add_argument('-n', '--light_num', type=int, default=6)
+argparser.add_argument('-rad', '--radius',type=float, default=0.1)
 argparser.add_argument('--fix_position', action='store_true') # not optimize light position
 argparser.add_argument('--size_opt', action='store_true') # if add this option, optimize size of light
 argparser.add_argument('--use_envmap', action='store_true')
 argparser.add_argument('-cp', '--checkpoint_path',type=str, default=None)
 argparser.add_argument('-it', '--iteration_count',type=int, default=600)
 argparser.add_argument('-lr', '--learning_rate',type=float, default=1.0)
+
 
 
 args = argparser.parse_args()
@@ -55,7 +57,7 @@ env_h = 30
 env_w = 60
 res = [gt_image.shape[0],gt_image.shape[1]]
 radiance_init = 0.1
-radius_init = 0.05
+radius_init = args.radius
 angles_init = [180, 0, 0]
 center_init = [0, 0, 2]
 spp = args.spp
